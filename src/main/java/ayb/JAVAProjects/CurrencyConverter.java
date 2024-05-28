@@ -7,10 +7,6 @@ import java.util.*;
 
 public class CurrencyConverter {
 
-    private static final List<String> SUPPORTED_CURRENCIES = Arrays.asList(
-            "USD", "EUR", "GBP", "JPY", "AUD", "CAD", "CHF", "CNY", "SEK", "NZD", "MAD", "..."
-    );
-
     private static final Map<String, String> CURRENCY_NAMES = new HashMap<String, String>() {{
         put("USD", "United States Dollar");
         put("EUR", "Euro");
@@ -54,22 +50,17 @@ public class CurrencyConverter {
 
     private static String getCurrencyFromUser(Scanner scanner, String type) {
         System.out.printf("Select the %s currency from the list below:%n", type);
-        for (int i = 0; i < SUPPORTED_CURRENCIES.size(); i++) {
-            String code = SUPPORTED_CURRENCIES.get(i);
+        for (String code : CURRENCY_NAMES.keySet()) {
             String name = CURRENCY_NAMES.getOrDefault(code, "Unknown Currency");
-            System.out.printf("%d. %s (%s)%n", i + 1, code, name);
+            System.out.printf("%s (%s)%n", code, name);
         }
 
-        int choice;
+        String currency;
         do {
-            System.out.printf("Enter the number corresponding to your %s currency: ", type);
-            while (!scanner.hasNextInt()) {
-                System.out.println("Invalid input. Please enter a number.");
-                scanner.next();
-            }
-            choice = scanner.nextInt();
-        } while (choice < 1 || choice > SUPPORTED_CURRENCIES.size());
+            System.out.printf("Enter the %s currency code: ", type);
+            currency = scanner.nextLine().trim().toUpperCase();
+        } while (!CURRENCY_NAMES.containsKey(currency));
 
-        return SUPPORTED_CURRENCIES.get(choice - 1);
+        return currency;
     }
 }
